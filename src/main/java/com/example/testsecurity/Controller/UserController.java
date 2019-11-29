@@ -81,30 +81,5 @@ public class UserController {
         }
         return result;
     }
-
-    @GetMapping(value = "/userPdf")
-    public void exportPDF(HttpServletResponse response){
-        response.setContentType("application/pdf");
-        response.setHeader("Content-Disposition", "attachment; filename=users.pdf");
-        try{
-            Connection conn = jdbcTemplate.getDataSource().getConnection();
-
-            ClassPathResource resource = new ClassPathResource("userReport.jrxml");
-
-            String path = "G:\\report-template\\userReport.jrxml";
-
-            //            String path = path;
-            JasperReport jasperReport = JasperCompileManager.compileReport(path);
-
-            // Parameters for report
-            Map<String, Object> parameters = new HashMap<>();
-            parameters.put("titleName","用户列表数据");
-            JasperPrint print = JasperFillManager.fillReport(jasperReport, parameters, conn);
-            OutputStream out = response.getOutputStream();
-            // Se pasa el jasper llenado y el stream para q sea reconocible por el browser
-            JasperExportManager.exportReportToPdfStream(print, out);
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-    }
+    
 }
